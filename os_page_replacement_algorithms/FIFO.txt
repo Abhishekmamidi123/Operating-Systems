@@ -1,0 +1,83 @@
+// 7 0 1 2 0 3 0 4 2 3 0 3 2 1 2 0 1 7 0 1     Ans : 15 PageFaults.
+// 4 7 3 0 1 7 3 8 5 4 5 3 4 7                 Ans : 12 PageFaults.
+
+import java.util.Random;
+import java.util.Scanner;
+public class FIFO {
+	public static void main(String args[]){
+//		Random random = new Random();
+		Scanner random = new Scanner(System.in);
+		int i,j,n,pointer=1,PageFaults;
+//		n = 1 + random.nextInt(20);
+		n = random.nextInt();
+		int Pages[] = new int[21];
+		int Memory[] = new int[4];
+		int PageFault[] = new int[21];
+//		n = 20;
+		PageFaults = 1;
+		for(i=1;i<=n;i++){
+		//	Pages[i] = 1 + random.nextInt(10);
+			Pages[i] = random.nextInt();
+			System.out.printf("%d ",Pages[i]);
+		}
+		System.out.println("\n");
+		
+		for(i=1;i<=3;i++){
+			Memory[i] = -1;
+		}
+		pointer = 1;
+		Memory[1] = Pages[1];
+/*		for(j=1;j<=3;j++){
+			System.out.printf("%d ",Memory[j]);
+		}
+		System.out.println("\n");*/
+		for(i=2;i<=n;i++){
+			if(Pages[i]==Memory[1] || Pages[i]==Memory[2] || Pages[i]==Memory[3]){
+				PageFault[i] = 1;
+				//Do nothing.
+			}
+			else if(Memory[1]==-1 || Memory[2]==-1 || Memory[3]==-1){
+				for(j=1;j<=3;j++){
+					if(Memory[j] == -1){
+						break;
+					}
+				}
+				Memory[j] = Pages[i];
+				PageFaults = PageFaults + 1;
+				PageFault[i] = 0;
+			}
+			else{
+//				System.out.println(pointer);
+				if(Pages[pointer]==Memory[1]){
+					Memory[1] = Pages[i];
+				}
+				else if(Pages[pointer]==Memory[2]){
+					Memory[2] = Pages[i];
+				}
+				else{
+					Memory[3] = Pages[i];
+				}
+				PageFaults = PageFaults + 1;
+				PageFault[i] = 0;
+				
+				for(j=pointer+1;;j++){
+					if(PageFault[j]==0){
+						break;
+					}
+//					System.out.printf("pointer:%d :%d\n",pointer,Pages[pointer]);
+					pointer = pointer + 1;
+				}
+				pointer = pointer + 1;
+			}
+/*			for(j=1;j<=3;j++){
+				System.out.printf("%d ",Memory[j]);
+			}
+			System.out.println("\n");*/
+		}
+		System.out.println(PageFaults);
+		for(j=1;j<=n;j++){
+			System.out.printf("%d ",PageFault[j]);
+		}
+		System.out.println("\n");
+	}
+}
